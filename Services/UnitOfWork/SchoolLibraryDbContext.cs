@@ -1,6 +1,6 @@
 namespace Services.UnitOfWork
 {
-    using Services.Models;
+    using global::Services.Models;
     using System.Data.Entity;
     using System.Data.Entity.ModelConfiguration.Conventions;
 

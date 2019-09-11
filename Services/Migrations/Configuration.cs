@@ -1,6 +1,7 @@
 ﻿namespace Services.Migrations
 {
-    using Services.Models;
+    using global::Services.Models;
+    using global::Services.UnitOfWork;
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
@@ -8,14 +9,14 @@
     using System.Globalization;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Services.UnitOfWork.SchoolLibraryDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<SchoolLibraryDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(Services.UnitOfWork.SchoolLibraryDbContext context)
+        protected override void Seed(SchoolLibraryDbContext context)
         {
             #region Genres
             var genres = new List<Genre>
