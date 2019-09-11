@@ -2,6 +2,6 @@
 {
     public class Sorting : ISorting
     {
-        public string SortingParam { get; set; }
+        public string SortingParam { get; set; } = string.Empty;
     }
 }

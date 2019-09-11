@@ -1,13 +1,14 @@
-﻿namespace Services.Migrations
+﻿using Services.Models;
+using Services.UnitOfWork;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.Migrations;
+using System.Globalization;
+using System.Linq;
+
+namespace Services.Migrations
 {
-    using global::Services.Models;
-    using global::Services.UnitOfWork;
-    using System;
-    using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Globalization;
-    using System.Linq;
+
 
     internal sealed class Configuration : DbMigrationsConfiguration<SchoolLibraryDbContext>
     {

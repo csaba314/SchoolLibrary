@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Services.DI;
 using Common.DI;
 using System.Web.Mvc;
+using MVC.ViewModels;
 
 namespace MVC.App_Start
 {
@@ -21,6 +19,9 @@ namespace MVC.App_Start
                 .Where(c => c.Name.EndsWith("Controller"));
 
             // Register viewModels and DTOs
+            builder.RegisterType<BookIndexViewModel>().AsSelf();
+
+            builder.RegisterType<ParameterBuilder>().As<IParameterBuilder>();
 
             // Register Services module
             builder.RegisterModule<ServiceDIModule>();

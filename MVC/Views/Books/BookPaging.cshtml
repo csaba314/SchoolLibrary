@@ -1,0 +1,40 @@
+﻿@model MVC.ViewModels.BookIndexViewModel
+
+@using PagedList.Mvc
+
+<table>
+    <tr>
+        @using (Html.BeginForm("Index", "Books", FormMethod.Get))
+        {
+
+            <td>
+                <strong>Page Size</strong>
+            </td>
+            <td>
+                @Html.DropDownList("pageSize",
+                                   (SelectList)ViewBag.PageSizeDropdown,
+                                   new { @class = "form-control", style="width: 65px;" })
+
+                @Html.Hidden("sortOrder", Model.Sorting.SortingParam)
+                @Html.Hidden("currentFilter", Model.Filtering.CurrentFilter)
+                @Html.Hidden("id", Model.Id)
+                @Html.Hidden("pageNumber", Model.Books.PageNumber)
+            </td>
+            <td style="column-width:15px;"></td>
+            <td>
+                <input type="submit" value="Select" class="btn btn-default" />
+            </td>
+            <td style="width:70px;"></td>
+            <td>
+                @Html.PagedListPager(Model.Books,
+                         pageNumber => Url.Action("Index","Books",
+                                            new { pageNumber ,
+                                                  sortOrder = Model.Sorting.SortingParam,
+                                                  currentFilter = Model.Filtering.CurrentFilter,
+                                                  pageSize = Model.Books.PageSize,
+                                                  id = 0 }),
+                         new PagedListRenderOptions { DisplayPageCountAndCurrentLocation = true })
+            </td>
+        }
+    </tr>
+</table>

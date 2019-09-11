@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
 
-
 namespace Services.UnitOfWork
 {
     public interface IUnitOfWork : IDisposable

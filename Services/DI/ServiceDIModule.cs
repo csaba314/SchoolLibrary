@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Autofac;
 using Services.Models;
+using Services.Services;
 using Services.UnitOfWork;
 
 namespace Services.DI
@@ -19,6 +16,9 @@ namespace Services.DI
                 .As(t => t.GetInterfaces().FirstOrDefault(i => i.Name == "I" + t.Name));
 
             // Register all Services
+            builder.RegisterAssemblyTypes(typeof(BookServices).Assembly)
+                .Where(t => t.Namespace.EndsWith("Services"))
+                .As(t => t.GetInterfaces().FirstOrDefault(i => i.Name == "I" + t.Name));
 
             // Register DbContext
             builder.RegisterType<SchoolLibraryDbContext>().AsSelf();

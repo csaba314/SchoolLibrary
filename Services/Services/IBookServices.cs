@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Common.Parameters;
+using PagedList;
+using Services.Models;
 
 namespace Services.Services
 {
-    interface IBookServices
+    public interface IBookServices
     {
+        IPagedList<IBook> GetBooksWithAuthorsAndGenres(ISorting sorting, IFiltering filtering, IPaging paging, IOptions options);
+        IBook GetBookWithAuthor(int id);
+        void Add(IBook book);
+        void Update(IBook book);
+        void Delete(IBook book);
 
     }
 }

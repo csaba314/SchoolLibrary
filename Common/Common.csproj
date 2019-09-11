@@ -49,9 +49,11 @@
     <Compile Include="Parameters\IFiltering.cs" />
     <Compile Include="Parameters\IOptions.cs" />
     <Compile Include="Parameters\IPaging.cs" />
+    <Compile Include="Parameters\IParametersFactory.cs" />
     <Compile Include="Parameters\ISorting.cs" />
     <Compile Include="Parameters\Options.cs" />
     <Compile Include="Parameters\Paging.cs" />
+    <Compile Include="Parameters\ParametersFactory.cs" />
     <Compile Include="Parameters\Sorting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

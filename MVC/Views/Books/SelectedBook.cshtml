@@ -1,0 +1,125 @@
+﻿@model MVC.ViewModels.BookIndexViewModel
+
+<div class="col-md-5 detailsDiv">
+    @foreach (var item in Model.Books)
+    {
+
+        if (item.ID == Model.Id)
+        {
+            <div class="col-md-12">
+                <div class="col-md-8" style="text-align:left">
+
+                    @* return back to list link *@
+                    @Html.ActionLink(" ", "Index",
+                                        new { id = 0,
+                                            sortOrder = Model.Sorting .SortingParam,
+                                            currentFilter = Model.Filtering.CurrentFilter,
+                                            page = Model.Books.PageNumber,
+                                            pageSize = Model.Books.PageSize },
+                                        new { @class = "btn btn-success glyphicon glyphicon-arrow-left" })
+
+                </div>
+                <div class="col-md-4" style="text-align:right">
+                    @Html.ActionLink(" ", "Edit", new { id = item.ID }, new { @class = "btn btn-warning glyphicon glyphicon-pencil" })
+                    @Html.ActionLink(" ", "Delete", new { id = item.ID }, new { @class = "btn btn-danger glyphicon glyphicon-trash" })
+
+                </div>
+            </div>
+            <h4 style="text-align:center"><strong> @item.Title</strong></h4>
+            <hr />
+            <div class="picture-div " style="text-align: center">
+                @if (item.FileModelId != null)
+                {
+                    <a href="@Url.Action("DownloadFile", "Books", new { id = item.FileModelId })" target="_blank">
+                        <img src="@Url.Action("DownloadFile", "Books", new { id = item.FileModelId })" height="200" />
+                    </a>
+                }
+                else
+                {
+                    <span><strong>NO IMAGE AVAILABLE</strong></span>
+                }
+            </div>
+            <hr />
+
+            <dl class="dl-horizontal">
+                <dt>
+                    Author
+                </dt>
+
+                <dd>
+                    @Html.ActionLink(item.Author.FullName, "Index", "Authors", new { id = item.AuthorID }, new { })
+                </dd>
+
+                <dt>
+                    Genre
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => item.Genre.Name)
+                </dd>
+
+                <dt>
+                    <br />
+                    Description
+                    <br />
+                </dt>
+
+                <dd>
+                    <br />
+                    @Html.DisplayFor(model => item.Description)
+                    <br />
+                </dd>
+
+                <dt>
+                    Serial Number
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => item.SerialNumber)
+                </dd>
+
+                <dt>
+                    Release Date
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => item.ReleaseDate)
+                </dd>
+
+                <dt>
+                    Publisher
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => item.Publisher)
+                </dd>
+
+                <dt>
+                    Number in Stock
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => item.NumberInStock)
+                </dd>
+                <dt>
+                    Rented Copies
+                </dt>
+                <dd>
+                    @item.RentedBooks
+                </dd>
+                <dt>
+                    Available
+                </dt>
+                <dd>
+                    @{
+                        var available = item.NumberInStock - item.RentedBooks;
+                    }
+                    @available
+                </dd>
+
+
+            </dl>
+        }
+    }
+</div>
+

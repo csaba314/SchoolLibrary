@@ -2,7 +2,7 @@
 {
     public class Filtering : IFiltering
     {
-        public string SearchString { get; set; }
-        public string CurrentFilter { get; set; }
+        public string SearchString { get; set; } = string.Empty;
+        public string CurrentFilter { get; set; } = string.Empty;
     }
 }
