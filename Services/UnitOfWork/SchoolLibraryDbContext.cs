@@ -1,10 +1,8 @@
 namespace Services.UnitOfWork
 {
     using Services.Models;
-    using System;
     using System.Data.Entity;
     using System.Data.Entity.ModelConfiguration.Conventions;
-    using System.Linq;
 
     public class SchoolLibraryDbContext : DbContext
     {
