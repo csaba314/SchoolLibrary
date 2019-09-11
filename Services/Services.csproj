@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\MVC\bin\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -40,6 +43,8 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,6 +53,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\201909110839222_initial.cs" />
+    <Compile Include="Migrations\201909110839222_initial.Designer.cs">
+      <DependentUpon>201909110839222_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909110845235_seedDbWithData.cs" />
+    <Compile Include="Migrations\201909110845235_seedDbWithData.Designer.cs">
+      <DependentUpon>201909110845235_seedDbWithData.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909110851035_seedDbWithData1.cs" />
+    <Compile Include="Migrations\201909110851035_seedDbWithData1.Designer.cs">
+      <DependentUpon>201909110851035_seedDbWithData1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Author.cs" />
     <Compile Include="Models\Book.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -61,14 +79,25 @@
     <Compile Include="Models\IRental.cs" />
     <Compile Include="Models\Rental.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitOfWork\SchoolLibraryDbContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />
-    <Folder Include="UnitOfWork\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201909110839222_initial.resx">
+      <DependentUpon>201909110839222_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909110845235_seedDbWithData.resx">
+      <DependentUpon>201909110845235_seedDbWithData.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909110851035_seedDbWithData1.resx">
+      <DependentUpon>201909110851035_seedDbWithData1.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
