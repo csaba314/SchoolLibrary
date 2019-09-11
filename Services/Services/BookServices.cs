@@ -10,12 +10,10 @@ namespace Services.Services
     public class BookServices : IBookServices
     {
         IUnitOfWork _unitOfWork;
-        SchoolLibraryDbContext _context;
-
-        public BookServices(IUnitOfWork unitOfWork/*, SchoolLibraryDbContext context*/)
+        
+        public BookServices(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            //_context = context;
         }
 
         public IPagedList<IBook> GetBooksWithAuthorsAndGenres(ISorting sorting, IFiltering filtering, IPaging paging, IOptions options)

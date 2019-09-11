@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-
+using System.Linq.Expressions;
 
 namespace Services.UnitOfWork
 {
@@ -18,6 +18,11 @@ namespace Services.UnitOfWork
         {
             return _context.Set<T>().Find(id);
         }
+
+        //public T Get<T>(Expression<Func<T, bool>> expresion) where T : class
+        //{
+        //    return _context.Set<T>().Find(expresion);
+        //}
 
         public DbSet<T> GetAll<T>() where T : class
         {

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Services.Models
 {
-    interface IFileModel
+    public interface IFileModel
     {
         int FileModelId { get; set; }
 

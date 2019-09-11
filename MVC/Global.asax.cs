@@ -7,6 +7,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using AutoMapper;
 
 namespace MVC
 {
@@ -15,6 +16,7 @@ namespace MVC
         protected void Application_Start()
         {
             DIContainerConfig.Configure();
+            Mapper.Initialize(m => m.AddProfile<AutoMapperProfile>());
 
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);

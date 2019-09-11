@@ -5,7 +5,10 @@ using System.Web;
 using System.Web.Mvc;
 using Common.Parameters;
 using MVC.ViewModels;
+using Services.Models;
 using Services.Services;
+using AutoMapper;
+using System.Net;
 
 namespace MVC.Controllers
 {
@@ -13,13 +16,16 @@ namespace MVC.Controllers
     {
 
         private IBookServices _services;
+        private IFileServices _fileServices;
         private IParameterBuilder _parameterBuilder;
 
         public BooksController(IBookServices services,
-                               IParameterBuilder parameterBuilder)
+                               IParameterBuilder parameterBuilder,
+                               IFileServices fileServices)
         {
             _services = services;
             _parameterBuilder = parameterBuilder;
+            _fileServices = fileServices;
         }
 
         // GET: Book
@@ -53,121 +59,123 @@ namespace MVC.Controllers
         }
 
 
-        //// GET: Book/Create
-        //public ActionResult Create()
-        //{
-        //    var model = this.modelBuilder.BuildCreateEditBookViewModel();
-        //    return View(model);
-        //}
+        // GET: Book/Create
+        public ActionResult Create()
+        {
+            var model = DependencyResolver.Current.GetService<BookDTO>();
 
-        //// POST: Book/Create
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include = "Title,Description,SerialNumber,ReleaseDate,AuthorID,GenreID,Publisher,NumberInStock,UploadedFile")]
-        //                            CreateEditBookViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
+            // todo add dropdowns for authors and genres
 
-        //        var book = new Book();
-        //        Mapper.Map(model, book);
+            return View(model);
+        }
 
-        //        if (model.UploadedFile != null)
-        //        {
-        //            book.FileModelId = FileModelHelper.CheckDbAndUploadeFile(model.UploadedFile);
-        //        }
+        // POST: Book/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Title,Description,SerialNumber,ReleaseDate,AuthorID,GenreID,Publisher,NumberInStock,UploadedFile")]
+                                    BookDTO model)
+        {
+            if (ModelState.IsValid)
+            {
 
-        //        unitOfWork.Books.Add(book);
-        //        unitOfWork.Save();
+                var book = DependencyResolver.Current.GetService<IBook>();
+                Mapper.Map(model, book);
 
-        //        return RedirectToAction("Index");
-        //    }
+                if (model.UploadedFile != null)
+                {
+                    book.FileModelId = _fileServices.CheckDbAndUploadeFile(model.UploadedFile);
+                }
 
+                _services.Add(book);
+                return RedirectToAction("Index");
+            }
 
-        //    return View(modelBuilder.RebuildCreateEditBookViewModel(model));
-        //}
+            // todo add dropdowns for authors and genres
 
-        //// GET: Book/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    var book = unitOfWork.Books.Find(b => b.ID == id).SingleOrDefault();
+            return View(model);
+        }
 
-        //    if (book == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
+        // GET: Book/Edit/5
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
-        //    var model = modelBuilder.BuildCreateEditBookViewModel();
-        //    Mapper.Map(book, model);
+            var book = _services.GetBookWithAuthor((int)id);
 
-        //    if (book.FileModelId != null)
-        //    {
-        //        model.FileModel = unitOfWork.Files.First(f => f.FileModelId == book.FileModelId);
-        //    }
+            if (book == null)
+            {
+                return HttpNotFound();
+            }
 
-        //    return View(model);
-        //}
+            var model = Mapper.Map<BookDTO>(book);
 
-        //// POST: Book/Edit/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        //// more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include = "ID,Title,Description,SerialNumber,ReleaseDate,AuthorID,GenreID,Publisher,NumberInStock,FileModelId,UploadedFile")]
-        //                         CreateEditBookViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var book = unitOfWork.Books.Get(model.ID);
+            if (book.FileModelId != null)
+            {
+                model.FileModel = _fileServices.Get((int)book.FileModelId);
+            }
 
-        //        Mapper.Map(model, book);
+            // todo add dropdowns for authors and genres
 
-        //        if (model.UploadedFile != null)
-        //        {
-        //            book.FileModelId = FileModelHelper.CheckDbAndUploadeFile(model.UploadedFile);
-        //        }
+            return View(model);
+        }
 
+        // POST: Book/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "ID,Title,Description,SerialNumber,ReleaseDate,AuthorID,GenreID,Publisher,NumberInStock,FileModelId,UploadedFile")]
+                                 BookDTO model)
+        {
+            if (ModelState.IsValid)
+            {
+                var book = _services.GetBookWithAuthor(model.ID);
 
-        //        unitOfWork.Save();
-        //        return RedirectToAction("Index");
-        //    }
+                Mapper.Map(model, book);
 
-        //    return View(modelBuilder.RebuildCreateEditBookViewModel(model));
-        //}
+                if (model.UploadedFile != null)
+                {
+                    book.FileModelId = _fileServices.CheckDbAndUploadeFile(model.UploadedFile);
+                }
 
-        //// GET: Book/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    var book = unitOfWork.Books.GetBookWithAuthor((int)id);
-        //    if (book == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(book);
-        //}
+                return RedirectToAction("Index");
+            }
 
-        //// POST: Book/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    var book = unitOfWork.Books.Get(id);
-        //    unitOfWork.Books.Remove(book);
-        //    unitOfWork.Save();
-        //    return RedirectToAction("Index");
-        //}
+            // todo add dropdowns for authors and genres
 
+            return View(model);
+        }
 
+        // GET: Book/Delete/5
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var book = _services.GetBookWithAuthor((int)id);
+            if (book == null)
+            {
+                return HttpNotFound();
+            }
+            return View(book);
+        }
+
+        // POST: Book/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var book = _services.GetBookWithAuthor(id);
+            _services.Delete(book);
+
+            return RedirectToAction("Index");
+        }
 
         protected override void Dispose(bool disposing)
         {
@@ -194,8 +202,8 @@ namespace MVC.Controllers
 
         //private void PopulateSelectListForAuthorAndGenre(CreateEditBookViewModel model)
         //{
-        //    ViewBag.AuthorID = new SelectList(unitOfWork.Authors.GetAuthorsByLastName(), "ID", "FullName", model.AuthorID);
-        //    ViewBag.GenreID = new SelectList(unitOfWork.Genres, "ID", "Name", model.GenreID);
+        //    ViewBag.AuthorDropDown = new SelectList(_services.Authors.GetAuthorsByLastName(), "ID", "FullName", model.AuthorID);
+        //    ViewBag.GenreDropDown = new SelectList(unitOfWork.Genres, "ID", "Name", model.GenreID);
         //}
     }
 }

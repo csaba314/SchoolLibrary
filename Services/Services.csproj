@@ -48,6 +48,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -57,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DI\ServiceDIModule.cs" />
+    <Compile Include="IFileServices.cs" />
     <Compile Include="Migrations\201909110839222_initial.cs" />
     <Compile Include="Migrations\201909110839222_initial.Designer.cs">
       <DependentUpon>201909110839222_initial.cs</DependentUpon>
@@ -73,17 +75,20 @@
     <Compile Include="Models\Author.cs" />
     <Compile Include="Models\Book.cs" />
     <Compile Include="Models\Customer.cs" />
+    <Compile Include="Models\FileHelper.cs" />
     <Compile Include="Models\FileModel.cs" />
     <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\IAuthor.cs" />
     <Compile Include="Models\IBook.cs" />
     <Compile Include="Models\ICustomer.cs" />
+    <Compile Include="Models\IFileHelper.cs" />
     <Compile Include="Models\IFileModel.cs" />
     <Compile Include="Models\IGenre.cs" />
     <Compile Include="Models\IRental.cs" />
     <Compile Include="Models\Rental.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BookServices.cs" />
+    <Compile Include="Services\FileServices.cs" />
     <Compile Include="Services\IBookServices.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="UnitOfWork\SchoolLibraryDbContext.cs" />
