@@ -58,6 +58,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DI\ServiceDIModule.cs" />
+    <Compile Include="Services\IGenreServices.cs" />
+    <Compile Include="Services\GenreServices.cs" />
     <Compile Include="Services\IAuthorServices.cs" />
     <Compile Include="Services\IFileServices.cs" />
     <Compile Include="Migrations\201909110839222_initial.cs" />

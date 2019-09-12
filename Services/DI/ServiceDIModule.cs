@@ -25,6 +25,7 @@ namespace Services.DI
             builder.RegisterType<BookServices>().As<IBookServices>();
             builder.RegisterType<AuthorServices>().As<IAuthorServices>();
             builder.RegisterType<FileServices>().As<IFileServices>();
+            builder.RegisterType<GenreServices>().As<IGenreServices>();
 
 
             // Register DbContext

@@ -10,7 +10,7 @@
     @Html.ActionLink("Add New Book", "Create", "Book", new { @class = "btn btn-info" })
 </p>
 
-@using (Html.BeginForm("Index", "Book", FormMethod.Get))
+@using (Html.BeginForm("Index", "Books", FormMethod.Get))
 {
     <p>
         Search by Title

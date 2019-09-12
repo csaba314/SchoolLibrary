@@ -48,5 +48,9 @@ namespace MVC.ViewModels
         public int? FileModelId { get; set; }
 
         public IFileModel FileModel { get; set; }
+
+        public IAuthor Author { get; set; }
+
+        public IGenre Genre { get; set; }
     }
 }

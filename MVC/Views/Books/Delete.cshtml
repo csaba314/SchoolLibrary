@@ -1,0 +1,92 @@
+﻿@model MVC.ViewModels.BookDTO
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this book?</h3>
+<div>
+    <hr />
+    <div class="col-md-4" style="text-align:center">
+        <img src="@Url.Action("DownloadFile", "Books", new { id = Model.FileModelId})" style="height:230px;" alt="Alternate Text" />
+    </div>
+    <div class="col-md-8">
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Title)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Title)
+            </dd>
+
+            <dt>
+                Author
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Author.FullName)
+            </dd>
+            <dt>
+                Genre
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Genre.Name)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.SerialNumber)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.SerialNumber)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ReleaseDate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ReleaseDate)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Publisher)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Publisher)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.NumberInStock)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.NumberInStock)
+            </dd>
+
+        </dl>
+        <br />
+    </div>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Confirm" class="btn btn-danger" />
+            @Html.ActionLink("Back to List", "Index", new { id = Model.ID }, new { @class = "btn btn-success" })
+        </div>
+    }
+</div>

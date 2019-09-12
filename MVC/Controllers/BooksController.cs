@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Common.Parameters;
 using MVC.ViewModels;
 using Services.Models;
 using Services.Services;
@@ -17,15 +14,22 @@ namespace MVC.Controllers
 
         private IBookServices _services;
         private IFileServices _fileServices;
+        private IAuthorServices _authorServices;
+        private IGenreServices _genreServices;
         private IParameterBuilder _parameterBuilder;
 
         public BooksController(IBookServices services,
+                               IAuthorServices authorServices,
+                               IGenreServices genreServices,
                                IParameterBuilder parameterBuilder,
                                IFileServices fileServices)
         {
             _services = services;
-            _parameterBuilder = parameterBuilder;
+            _authorServices = authorServices;
+            _genreServices = genreServices;
             _fileServices = fileServices;
+            _parameterBuilder = parameterBuilder;
+            
         }
 
         // GET: Book
@@ -62,14 +66,13 @@ namespace MVC.Controllers
         {
             var model = DependencyResolver.Current.GetService<BookDTO>();
 
-            // todo add dropdowns for authors and genres
+            ViewBag.AuthorsDropdown = new SelectList(_authorServices.GetAuthorsByLastName(), "ID", "FullName");
+            ViewBag.GenresDropdown = new SelectList(_genreServices.GetAll(), "ID", "Name");
 
             return View(model);
         }
 
         // POST: Book/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Title,Description,SerialNumber,ReleaseDate,AuthorID,GenreID,Publisher,NumberInStock,UploadedFile")]
@@ -90,7 +93,8 @@ namespace MVC.Controllers
                 return RedirectToAction("Index");
             }
 
-            // todo add dropdowns for authors and genres
+            ViewBag.AuthorsDropdown = new SelectList(_authorServices.GetAuthorsByLastName(), "ID", "FullName");
+            ViewBag.GenresDropdown = new SelectList(_genreServices.GetAll(), "ID", "Name");
 
             return View(model);
         }
@@ -117,14 +121,12 @@ namespace MVC.Controllers
                 model.FileModel = _fileServices.Get((int)book.FileModelId);
             }
 
-            // todo add dropdowns for authors and genres
+            ViewBag.AuthorsDropdown = new SelectList(_authorServices.GetAuthorsByLastName(), "ID", "FullName", model.AuthorID);
+            ViewBag.GenresDropdown = new SelectList(_genreServices.GetAll(), "ID", "Name", model.GenreID);
 
             return View(model);
         }
 
-        // POST: Book/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "ID,Title,Description,SerialNumber,ReleaseDate,AuthorID,GenreID,Publisher,NumberInStock,FileModelId,UploadedFile")]
@@ -141,10 +143,13 @@ namespace MVC.Controllers
                     book.FileModelId = _fileServices.CheckDbAndUploadeFile(model.UploadedFile);
                 }
 
+                _services.Update(book);
+
                 return RedirectToAction("Index");
             }
 
-            // todo add dropdowns for authors and genres
+            ViewBag.AuthorsDropdown = new SelectList(_authorServices.GetAuthorsByLastName(), "ID", "FullName", model.AuthorID);
+            ViewBag.GenresDropdown = new SelectList(_genreServices.GetAll(), "ID", "Name", model.GenreID);
 
             return View(model);
         }
@@ -161,7 +166,7 @@ namespace MVC.Controllers
             {
                 return HttpNotFound();
             }
-            return View(book);
+            return View(Mapper.Map<BookDTO>(book));
         }
 
         // POST: Book/Delete/5
@@ -177,31 +182,7 @@ namespace MVC.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                //_services.Dispose();
-            }
             base.Dispose(disposing);
         }
-
-
-        //public ActionResult DownloadFile(int id)
-        //{
-        //    var file = FileModelHelper.GetFile(id);
-
-        //    if (file != null)
-        //    {
-        //        return File(file.FileContent, file.ContentType);
-        //    }
-
-        //    return View();
-        //}
-
-
-        //private void PopulateSelectListForAuthorAndGenre(CreateEditBookViewModel model)
-        //{
-        //    ViewBag.AuthorDropDown = new SelectList(_services.Authors.GetAuthorsByLastName(), "ID", "FullName", model.AuthorID);
-        //    ViewBag.GenreDropDown = new SelectList(unitOfWork.Genres, "ID", "Name", model.GenreID);
-        //}
     }
 }
