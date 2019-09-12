@@ -38,7 +38,7 @@ namespace Services.Models
 
         public FileModel FileModel { get; set; }
 
-        public virtual ICollection<IBook> Books { get; set; }
+        public virtual IEnumerable<IBook> Books { get; set; }
         #endregion
     }
 }

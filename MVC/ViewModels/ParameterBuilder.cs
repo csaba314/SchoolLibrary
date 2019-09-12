@@ -16,12 +16,14 @@ namespace MVC.ViewModels
         }
 
         public void Build(IParameterizedViewModel model, 
-            string searchString, string sortingParam, 
-            int pageSize, int pageNumber, 
-            bool includeAuthors, bool includeGenres)
+                          string searchString, 
+                          string sortingParam, 
+                          int pageSize, int pageNumber, 
+                          bool includeAuthors = false, bool includeGenres = false)
         {
             model.Filtering = _parametersFactory.FilteringInstance();
             model.Filtering.SearchString = searchString;
+            model.Filtering.CurrentFilter = searchString;
 
             model.Sorting = _parametersFactory.SortingInstance();
             model.Sorting.SortingParam = sortingParam;

@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using Common.Parameters;
 using PagedList;
@@ -14,6 +15,16 @@ namespace Services.Services
         public BookServices(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public IBook Get(int id)
+        {
+            return _unitOfWork.Get<Book>(id);
+        }
+
+        public IEnumerable<IBook> GetBooksByAuthor(int authorId)
+        {
+            return _unitOfWork.GetAll<Book>().Where(x => x.AuthorID == authorId).Include(x => x.Genre).ToList();
         }
 
         public IPagedList<IBook> GetBooksWithAuthorsAndGenres(ISorting sorting, IFiltering filtering, IPaging paging, IOptions options)
@@ -65,11 +76,6 @@ namespace Services.Services
             }
 
             return pagedList;
-        }
-
-        public IBook GetBookWithAuthor(int id)
-        {
-            return _unitOfWork.Get<Book>(id);
         }
 
         public void Add(IBook book)

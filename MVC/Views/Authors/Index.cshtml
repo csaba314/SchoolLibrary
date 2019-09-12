@@ -1,0 +1,242 @@
+﻿@model MVC.ViewModels.AuthorIndexViewModel
+
+@{
+    ViewBag.Title = "Authors";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Add New Author", "Create", "Authors", new { @class = "btn btn-info" })
+</p>
+
+@using (Html.BeginForm())
+{
+    <p>
+        <strong>Search by First or Last Name</strong>
+        <br />
+        @Html.TextBox("searchString", Model.Filtering.SearchString)
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </p>
+}
+
+
+<div class="main-container col-md-12">
+    <div class="table-container col-md-5">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.ActionLink("Last Name", "Index", new { sortOrder = Model.Sorting.SortingParam,
+                                                                 currentFilter = Model.Filtering.CurrentFilter,
+                                                                 pageSize = Model.Authors.PageSize,
+                                                                 pageNumber = Model.Authors.PageNumber })
+                </th>
+                <th>
+                    @Html.ActionLink("First Name", "Index", new { sortOrder = Model.Sorting.SortingParam,
+                                                                  currentFilter = Model.Filtering.CurrentFilter,
+                                                                  pageSize = Model.Authors.PageSize,
+                                                                  pageNumber = Model.Authors.PageNumber })
+                </th>
+
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Authors)
+            {
+                string selectedRow = "";
+
+                if (item.ID == ViewBag.AuthorId)
+                {
+                    selectedRow = "success";
+                    ViewBag.AuthorName = item.FullName;
+                }
+
+
+
+                <tr class="@selectedRow">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+
+                    <td>
+                        @Html.ActionLink(" ", "Index", new { id = item.ID,
+                                                             currentFilter = Model.Filtering.CurrentFilter,
+                                                             sortOrder = Model.Sorting.SortingParam ,
+                                                             pageSize = Model.Authors.PageSize,
+                                                             pageNumber = Model.Authors.PageNumber }
+                                                     , new { @class = "btn btn-primary glyphicon glyphicon-arrow-right" })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+
+    <div class="details-container col-md-7">
+
+        @if (Model.Id > 0)
+        {
+            <div class="detailsDiv">
+                @foreach (var item in Model.Authors)
+                {
+                    if (item.ID == Model.Id)
+                    {
+                        <div class="col-md-12">
+                            <div class="col-md-8" style="text-align:left">
+
+                                @* return back to list link *@
+                                @Html.ActionLink(" ", "Index",
+                                                    new { id = 0,
+                                                        currentFilter = Model.Filtering.CurrentFilter,
+                                                        sortOrder = Model.Sorting.SortingParam,
+                                                        pageSize = Model.Authors.PageSize,
+                                                        pageNumber = Model.Authors.PageNumber },
+                                                        new { @class = "btn btn-success glyphicon glyphicon-arrow-left" })
+
+                            </div>
+                            <div class="col-md-4" style="text-align:right">
+                                @Html.ActionLink(" ", "Edit", new { id = item.ID }, new { @class = "btn btn-warning glyphicon glyphicon-pencil" })
+                                @Html.ActionLink(" ", "Delete", new { id = item.ID }, new { @class = "btn btn-danger glyphicon glyphicon-trash" })
+                            </div>
+                        </div>
+
+                        //display name of the author along with date of birth and date of death if not null
+                        <h2 style="text-align:center"><strong>@item.FullName</strong></h2>
+
+                        <p style="text-align:center">
+                            <strong>
+                                @if (item.DateOfBirth != null)
+                                {
+                                    @item.DateOfBirth.Value.ToShortDateString()
+                                }
+                                -
+                                @if (item.DateOfDeath != null)
+                                {
+                                    @item.DateOfDeath.Value.ToShortDateString()
+                                }
+                            </strong>
+                        </p>
+
+                        <div class="picture-div " style="text-align: center">
+                            @if (item.FileModelId != null)
+                            {
+                                <a href="@Url.Action("DownloadFile", "Files", new { id = item.FileModelId })" target="_blank">
+                                    <img src="@Url.Action("DownloadFile", "Files", new { id = item.FileModelId })" width="150" height="200" /> 
+                                </a>
+                            }
+                            else
+                            {
+                                <span><strong>NO IMAGE AVAILABLE</strong></span>
+                            }
+                        </div>
+                        <hr />
+
+                        @*About author*@
+                        <div class="about-author-div" style="text-align:center">
+                            <p>
+                                <strong>About:</strong>
+                                @Html.DisplayFor(model => item.AboutAuthor)
+                            </p>
+                        </div>
+                        @*List of books*@
+
+
+                    }
+                }
+
+                <table class="table table-bordered table-hover">
+                    <tr>
+                        <th>
+                            Title
+                        </th>
+                        <th>
+                            Genre
+                        </th>
+                        <th>
+                            Released
+                        </th>
+
+                    </tr>
+                    @foreach (var book in Model.Books)
+                    {
+                        string selectedRow = "";
+
+                        if (book.ID == ViewBag.BookId)
+                        {
+                            selectedRow = "success";
+                        }
+                        <tr class="@selectedRow">
+                            <td>
+
+                                @Html.ActionLink(book.Title, "Index", new { id = ViewBag.AuthorId, bookId = book.ID }, new { })
+                            </td>
+                            <td>
+                                @book.Genre.Name
+                            </td>
+                            <td>
+                                @book.ReleaseDate.ToShortDateString()
+                            </td>
+
+                        </tr>
+
+                        if (ViewBag.BookId != null && ViewBag.BookId == book.ID)
+
+                        {
+                            <tr>
+                                @if (book.FileModelId != null)
+                                {
+                                    <td>
+                                        <a href="@Url.Action("DownloadFile", "Files", new { id = book.FileModelId })" target="_blank">
+                                            <img src="@Url.Action("DownloadFile", "Files", new { id = book.FileModelId })" width="100" height="130" />
+                                        </a>
+                                        <br /><br />
+                                        <strong>SN: @book.SerialNumber.ToString()</strong>
+                                    </td>
+                                }
+                                <td colspan="3">
+                                    <dl>
+                                        <dt>
+
+                                        </dt>
+                                        <dt>
+                                            Description
+                                        </dt>
+                                        <dd>
+                                            @Html.DisplayFor(model => book.Description)
+                                        </dd>
+
+                                        <dt>
+                                            Books available:
+                                            @if (book.NumberInStock == 0)
+                                            {
+                                                <span>Book unavailable</span>
+                                            }
+                                            else
+                                            {
+                                                @Html.DisplayFor(model => book.NumberInStock)
+                                            }
+                                        </dt>
+
+                                        @if (book.Publisher != null)
+                                        {
+                                            <dt>
+                                                Published by: @book.Publisher
+                                            </dt>
+                                        }
+
+                                    </dl>
+                                </td>
+                            </tr>
+                        }
+
+
+                    }
+                </table>
+            </div>
+        }
+
+    </div>
+</div>

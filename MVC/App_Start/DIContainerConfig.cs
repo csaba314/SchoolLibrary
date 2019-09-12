@@ -14,7 +14,7 @@ namespace MVC.App_Start
         {
             var builder = new ContainerBuilder();
 
-            // Register MVC controllers. (MvcApplication is the name of the class in Global.asax.)
+            // Register MVC controllers
             builder.RegisterControllers(typeof(MvcApplication).Assembly)
                 .Where(c => c.Name.EndsWith("Controller"));
 
@@ -24,10 +24,11 @@ namespace MVC.App_Start
                 .As(x => x.GetInterfaces().Where(i => i.Name == "I" + x.Name));
 
             builder.RegisterAssemblyTypes(typeof(BookIndexViewModel).Assembly)
-                .Where(x => x.Name.EndsWith("ViewModel"))
+                .Where(x => x.Name.EndsWith("ViewModel") && x.Namespace.EndsWith("ViewModels"))
                 .AsSelf();
 
             //builder.RegisterType<BookIndexViewModel>().AsSelf();
+            //builder.RegisterType<AuthorIndexViewModel>().AsSelf();
 
             builder.RegisterType<ParameterBuilder>().As<IParameterBuilder>();
 

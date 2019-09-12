@@ -36,6 +36,6 @@ namespace Services.Models
 
         FileModel FileModel { get; set; }
 
-        ICollection<IBook> Books { get; set; }
+        IEnumerable<IBook> Books { get; set; }
     }
 }

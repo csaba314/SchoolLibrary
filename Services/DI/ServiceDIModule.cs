@@ -10,15 +10,22 @@ namespace Services.DI
     {
         protected override void Load(ContainerBuilder builder)
         {
+            var serviceAssembly = typeof(Book).Assembly;
+
             // Register all domain model objects
-            builder.RegisterAssemblyTypes(typeof(Book).Assembly)
+            builder.RegisterAssemblyTypes(serviceAssembly)
                 .Where(t => t.Namespace.EndsWith("Models"))
                 .As(t => t.GetInterfaces().FirstOrDefault(i => i.Name == "I" + t.Name));
 
-            // Register all Services
-            builder.RegisterAssemblyTypes(typeof(BookServices).Assembly)
-                .Where(t => t.Namespace.EndsWith("Services"))
-                .As(t => t.GetInterfaces().FirstOrDefault(i => i.Name == "I" + t.Name));
+            //Register all Services
+            //builder.RegisterAssemblyTypes(serviceAssembly)
+            //    .Where(t => t.Namespace.EndsWith("Services"))
+            //    .As(t => t.GetInterfaces().FirstOrDefault(i => i.Name == "I" + t.Name));
+
+            builder.RegisterType<BookServices>().As<IBookServices>();
+            builder.RegisterType<AuthorServices>().As<IAuthorServices>();
+            builder.RegisterType<FileServices>().As<IFileServices>();
+
 
             // Register DbContext
             builder.RegisterType<SchoolLibraryDbContext>().AsSelf();

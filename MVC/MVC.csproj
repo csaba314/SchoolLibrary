@@ -153,12 +153,16 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AuthorsController.cs" />
     <Compile Include="Controllers\BooksController.cs" />
+    <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\AuthorDTO.cs" />
+    <Compile Include="ViewModels\AuthorIndexViewModel.cs" />
     <Compile Include="ViewModels\BookDTO.cs" />
     <Compile Include="ViewModels\BookIndexViewModel.cs" />
     <Compile Include="ViewModels\IParameterBuilder.cs" />
@@ -206,9 +210,11 @@
     <Content Include="Views\Books\BookPaging.cshtml" />
     <Content Include="Views\Books\SelectedBook.cshtml" />
     <Content Include="Views\Books\Create.cshtml" />
+    <Content Include="Views\Authors\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Files\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -30,8 +30,8 @@
             <div class="picture-div " style="text-align: center">
                 @if (item.FileModelId != null)
                 {
-                    <a href="@Url.Action("DownloadFile", "Books", new { id = item.FileModelId })" target="_blank">
-                        <img src="@Url.Action("DownloadFile", "Books", new { id = item.FileModelId })" height="200" />
+                    <a href="@Url.Action("DownloadFile", "Files", new { id = item.FileModelId })" target="_blank">
+                        <img src="@Url.Action("DownloadFile", "Files", new { id = item.FileModelId })" height="200" />
                     </a>
                 }
                 else

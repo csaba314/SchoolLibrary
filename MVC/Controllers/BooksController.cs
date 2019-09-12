@@ -41,8 +41,6 @@ namespace MVC.Controllers
                 searchString = currentFilter;
             }
 
-            
-
             var model = DependencyResolver.Current.GetService<BookIndexViewModel>();
             _parameterBuilder.Build(model, searchString, sortOrder, pageSize, pageNumber, true, true);
 
@@ -105,7 +103,7 @@ namespace MVC.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var book = _services.GetBookWithAuthor((int)id);
+            var book = _services.Get((int)id);
 
             if (book == null)
             {
@@ -134,7 +132,7 @@ namespace MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                var book = _services.GetBookWithAuthor(model.ID);
+                var book = _services.Get(model.ID);
 
                 Mapper.Map(model, book);
 
@@ -158,7 +156,7 @@ namespace MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var book = _services.GetBookWithAuthor((int)id);
+            var book = _services.Get((int)id);
             if (book == null)
             {
                 return HttpNotFound();
@@ -171,7 +169,7 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var book = _services.GetBookWithAuthor(id);
+            var book = _services.Get(id);
             _services.Delete(book);
 
             return RedirectToAction("Index");

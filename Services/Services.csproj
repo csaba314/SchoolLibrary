@@ -58,7 +58,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DI\ServiceDIModule.cs" />
-    <Compile Include="IFileServices.cs" />
+    <Compile Include="Services\IAuthorServices.cs" />
+    <Compile Include="Services\IFileServices.cs" />
     <Compile Include="Migrations\201909110839222_initial.cs" />
     <Compile Include="Migrations\201909110839222_initial.Designer.cs">
       <DependentUpon>201909110839222_initial.cs</DependentUpon>
@@ -87,9 +88,12 @@
     <Compile Include="Models\IRental.cs" />
     <Compile Include="Models\Rental.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AuthorServices.cs" />
     <Compile Include="Services\BookServices.cs" />
+    <Compile Include="Services\CustomerServices.cs" />
     <Compile Include="Services\FileServices.cs" />
     <Compile Include="Services\IBookServices.cs" />
+    <Compile Include="Services\RentalServices.cs" />
     <Compile Include="UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="UnitOfWork\SchoolLibraryDbContext.cs" />
     <Compile Include="UnitOfWork\UnitOfWork.cs" />
