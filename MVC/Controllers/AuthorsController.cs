@@ -165,7 +165,7 @@ namespace MVC.Controllers
             {
                 return HttpNotFound();
             }
-            return View(author);
+            return View(Mapper.Map<AuthorDTO>(author));
         }
 
         // POST: Authors/Delete/5

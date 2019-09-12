@@ -92,7 +92,7 @@ namespace Services.Services
                 author.Books = _unitOfWork.GetAll<Book>().Where(x => x.AuthorID == author.ID).ToList();
                 foreach (var item in author.Books)
                 {
-                    item.AuthorID = 0;
+                    item.AuthorID = 1; // set book author to Anonymous (ID == 1)
                     _unitOfWork.Update<Book>(item as Book);
                 }
                 _unitOfWork.Delete<Author>(author as Author);

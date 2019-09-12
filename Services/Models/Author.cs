@@ -31,7 +31,7 @@ namespace Services.Models
         public int? FileModelId { get; set; }
 
         [Display(Name = "Full Name")]
-        public string FullName { get { return string.Format("{0}, {1}", this.LastName, this.FirstName); } }
+        public string FullName { get { return ID != 1 ? string.Format("{0}, {1}", this.LastName, this.FirstName) : this.LastName; } }
         #endregion
 
         #region Navigation Properties

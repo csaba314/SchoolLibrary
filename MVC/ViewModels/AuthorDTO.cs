@@ -41,5 +41,7 @@ namespace MVC.ViewModels
         public int? FileModelId { get; set; }
 
         public IFileModel FileModel { get; set; }
+
+        public IEnumerable<BookDTO> Books { get; set; }
     }
 }

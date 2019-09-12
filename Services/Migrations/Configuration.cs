@@ -67,6 +67,11 @@ namespace Services.Migrations
             #region Authors
             var authors = new List<Author>
             {
+                new Author {
+                    ID = 1,
+                    LastName ="Anonymous",
+                    FirstName =string.Empty,
+                    Books = new List<IBook>() },
                 new Author { LastName="Tolkien",
                     FirstName ="J. R. R.",
                     FileModelId = images.Single(i => i.FileName == "tolkien1-290x366.jpg").FileModelId,
