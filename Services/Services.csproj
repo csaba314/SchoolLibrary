@@ -58,6 +58,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DI\ServiceDIModule.cs" />
+    <Compile Include="Services\IRentalServices.cs" />
+    <Compile Include="Services\ICustomerServices.cs" />
     <Compile Include="Services\IGenreServices.cs" />
     <Compile Include="Services\GenreServices.cs" />
     <Compile Include="Services\IAuthorServices.cs" />

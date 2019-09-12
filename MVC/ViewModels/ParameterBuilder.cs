@@ -19,7 +19,7 @@ namespace MVC.ViewModels
                           string searchString, 
                           string sortingParam, 
                           int pageSize, int pageNumber, 
-                          bool includeAuthors = false, bool includeGenres = false)
+                          int id = 0, bool includeAuthors = false, bool includeGenres = false, bool IncludeRentalHistory = false)
         {
             model.Filtering = _parametersFactory.FilteringInstance();
             model.Filtering.SearchString = searchString;
@@ -33,8 +33,10 @@ namespace MVC.ViewModels
             model.Paging.PageSize = pageSize;
 
             model.Options = _parametersFactory.OptionsInstance();
+            model.Options.Id = id;
             model.Options.IncludeAuthors = includeAuthors;
             model.Options.IncludeGenres = includeGenres;
+            model.Options.IncludeRentalHistory = IncludeRentalHistory;
         }
     }
 }

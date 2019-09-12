@@ -17,6 +17,9 @@ namespace MVC.App_Start
 
             Mapper.CreateMap<AuthorDTO, IAuthor>().ForMember(m => m.ID, opt => opt.Ignore());
             Mapper.CreateMap<IAuthor, AuthorDTO>();
+
+            Mapper.CreateMap<CustomerDTO, ICustomer>().ForMember(m => m.Id, opt => opt.Ignore());
+            Mapper.CreateMap<ICustomer, CustomerDTO>();
         }
     }
 }

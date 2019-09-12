@@ -6,6 +6,6 @@
                    string searchString, 
                    string sortingParam,
                    int pageSize, int pageNumber,
-                   bool includeAuthors = false, bool includeGenres = false);
+                   int id = 0, bool includeAuthors = false, bool includeGenres = false, bool IncludeRentalHistory = false);
     }
 }

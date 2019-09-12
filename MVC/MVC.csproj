@@ -155,6 +155,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AuthorsController.cs" />
     <Compile Include="Controllers\BooksController.cs" />
+    <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -165,6 +166,8 @@
     <Compile Include="ViewModels\AuthorIndexViewModel.cs" />
     <Compile Include="ViewModels\BookDTO.cs" />
     <Compile Include="ViewModels\BookIndexViewModel.cs" />
+    <Compile Include="ViewModels\CustomerDTO.cs" />
+    <Compile Include="ViewModels\CustomerIndexViewModel.cs" />
     <Compile Include="ViewModels\IParameterBuilder.cs" />
     <Compile Include="ViewModels\IParameterizedViewModel.cs" />
     <Compile Include="ViewModels\ParameterBuilder.cs" />
@@ -219,6 +222,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Customers\" />
     <Folder Include="Views\Files\" />
   </ItemGroup>
   <ItemGroup>
