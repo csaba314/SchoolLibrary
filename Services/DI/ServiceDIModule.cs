@@ -27,6 +27,7 @@ namespace Services.DI
             builder.RegisterType<FileServices>().As<IFileServices>();
             builder.RegisterType<GenreServices>().As<IGenreServices>();
             builder.RegisterType<CustomerServices>().As<ICustomerServices>();
+            builder.RegisterType<RentalServices>().As<IRentalServices>();
 
 
             // Register DbContext

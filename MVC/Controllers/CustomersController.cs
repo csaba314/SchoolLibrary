@@ -4,9 +4,7 @@ using Services.Models;
 using Services.Services;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 
 namespace MVC.Controllers
@@ -51,7 +49,7 @@ namespace MVC.Controllers
             ViewBag.FirstNameSort = sortOrder == "fName" ? "fName_desc" : "fName";
             ViewBag.AccountNumberSort = sortOrder == "accountNo" ? "accountNo_desc" : "accountNo"; 
 
-            ViewBag.PageSelectList = new SelectList(new List<int> { 5, 10, 20, 40 });
+            ViewBag.PageSelectList = new SelectList(new List<int> { 5, 10, 20, 40 }, model.Customers.PageSize);
 
             return View(model);
         }
@@ -60,9 +58,7 @@ namespace MVC.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-
-            var model = DependencyResolver.Current.GetService<CustomerDTO>();
-            return View(model);
+            return View();
         }
 
         // POST: Customer/Create
@@ -70,9 +66,6 @@ namespace MVC.Controllers
         public ActionResult Create([Bind(Include = "FirstName, LastName, Address, PhoneNumber, CustomerType")]
                                     CustomerDTO model)
         {
-            //var errors = ModelState.Values.SelectMany(v => v.Errors);
-
-
             if (ModelState.IsValid)
             {
                 model.AccountNumber = _customerServices.GenerateAccountNumber();
@@ -84,7 +77,6 @@ namespace MVC.Controllers
                 _customerServices.Add(customer);
 
                 return RedirectToAction("Index");
-
             }
 
             return View(model);
@@ -114,7 +106,7 @@ namespace MVC.Controllers
 
         // POST: Customer/Edit/1
         [HttpPost]
-        public ActionResult Edit([Bind(Include = "Id, AccountNumber, FirstName, LastName, Address, PhoneNumber, CustomerType")]
+        public ActionResult Edit([Bind(Include = "Id, AccountNumber, FirstName, LastName, Address, PhoneNumber, CustomerType, RentedBooks")]
                                   CustomerDTO model)
         {
             if (ModelState.IsValid)
@@ -162,7 +154,6 @@ namespace MVC.Controllers
             var customer = _customerServices.Get(id);
             customer.CustomerType = CustomerType.Disabled;
             _customerServices.Update(customer);
-
 
             return RedirectToAction("Index");
         }

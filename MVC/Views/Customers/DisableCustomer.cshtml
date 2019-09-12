@@ -1,0 +1,75 @@
+﻿@model MVC.ViewModels.CustomerDTO
+
+<div>
+    <h3>Are you sure you want to disable the account for customer @ViewBag.CustomerName</h3>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AccountNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AccountNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RentedBooks)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.RentedBooks)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CustomerType)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.HiddenFor(model => model.Id)
+
+
+    @using (Html.BeginForm("DisableCustomer", "Customers", FormMethod.Post))
+    {
+        <input type="submit" value="Confirm" class="btn btn-danger" />
+    }
+
+    @Html.ActionLink("Back to List", "Index")
+</p>

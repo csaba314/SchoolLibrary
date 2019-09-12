@@ -5,8 +5,8 @@ using Services.UnitOfWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.Entity;
+
 
 namespace Services.Services
 {
@@ -36,7 +36,8 @@ namespace Services.Services
                                               || c.LastName.ToLower().Contains(filtering.SearchString.ToLower()));
             }
 
-            rentals = _unitOfWork.GetAll<Rental>().Where(r => r.CustomerId == options.Id);
+            rentals = _unitOfWork.GetAll<Rental>().Include(r => r.Book)
+                .Where(r => r.CustomerId == options.Id).OrderByDescending(x => x.DateRented);
 
 
             if ((options.IncludeRentalHistory == false) && (rentals != null))
@@ -81,6 +82,7 @@ namespace Services.Services
             if (customer is Customer)
             {
                 _unitOfWork.Add<Customer>(customer as Customer);
+                _unitOfWork.Commit();
             }
         }
 
@@ -89,6 +91,7 @@ namespace Services.Services
             if (customer is Customer)
             {
                 _unitOfWork.Update<Customer>(customer as Customer);
+                _unitOfWork.Commit();
             }
         }
 
