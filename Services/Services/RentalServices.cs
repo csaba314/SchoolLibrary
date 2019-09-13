@@ -113,16 +113,36 @@ namespace Services.Services
 
         public IDictionary<string, string> PopulateCustomersDropDown()
         {
-            return _unitOfWork.GetAll<Customer>()
-                .Where(c => GetCustomerRentalCapacity(c) > 0)
-                .OrderBy(x => x.LastName)
-                .Select(x => new { x.Id, x.FullName })
+
+            var listOfCustomers = _unitOfWork.GetAll<Customer>().OrderBy(x => x.LastName);
+            var filteredList = new List<Customer>();
+
+            foreach (var item in listOfCustomers)
+            {
+                if (GetCustomerRentalCapacity(item) > 0)
+                {
+                    filteredList.Add(item);
+                }
+            }
+            return filteredList
+                .Select(x => new { x.Id, x.LastName })
                 .AsEnumerable()
-                .ToDictionary(x => x.Id.ToString(), y => y.FullName);
+                .ToDictionary(x => x.Id.ToString(), y => y.LastName);
         }
 
         public IDictionary<string, string> PopulateBooksDropDown()
         {
+            //var listOfBooks = _unitOfWork.GetAll<Book>().OrderBy(b => b.Title);
+            //var filteredList = new List<Book>();
+            //foreach (var item in listOfBooks)
+            //{
+            //    if (GetCustomerRentalCapacity(item) > 0)
+            //    {
+            //        filteredList.Add(item);
+            //    }
+            //}
+
+
             return _unitOfWork.GetAll<Book>()
                 .Where(b => b.NumberInStock - b.RentedBooks > 0)
                 .OrderBy(b => b.Title)
@@ -152,8 +172,8 @@ namespace Services.Services
 
         public void ReturnBook(IRental model)
         {
+            _unitOfWork.Get<Book>(model.BookId).RentedBooks--;
             _unitOfWork.Get<Customer>(model.CustomerId).RentedBooks--;
-            _unitOfWork.Get<Customer>(model.BookId).RentedBooks--;
             _unitOfWork.Get<Rental>(model.Id).DateReturned = DateTime.Now;
             _unitOfWork.Commit();
         }
@@ -162,10 +182,14 @@ namespace Services.Services
         {
             if (rental is Rental)
             {
+                var book = _unitOfWork.Get<Book>(rental.BookId);
+                book.RentedBooks++;
+
+                var customer = _unitOfWork.Get<Customer>(rental.CustomerId);
+                customer.RentedBooks++;
                 _unitOfWork.Add<Rental>(rental as Rental);
                 _unitOfWork.Commit();
             }
-
         }
 
     }

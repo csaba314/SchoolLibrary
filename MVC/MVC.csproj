@@ -229,6 +229,9 @@
     <Content Include="Views\Rentals\Index.cshtml" />
     <Content Include="Views\Rentals\RentalsPaging.cshtml" />
     <Content Include="Views\Rentals\ReturnBook.cshtml" />
+    <Content Include="Views\Rentals\CreateRental.cshtml" />
+    <Content Include="Views\Rentals\SelectCustomer.cshtml" />
+    <Content Include="Views\Rentals\SelectBook.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

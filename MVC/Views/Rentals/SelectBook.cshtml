@@ -1,0 +1,27 @@
+﻿@model MVC.ViewModels.RentalDTO
+
+@using (Html.BeginForm("AddBooks", "Rentals", FormMethod.Get))
+{
+    <div class="row" style="height:100px;">
+        <div class="form-group">
+            <div class="col-md-12">
+                <table>
+                    <tr>
+                        <td><strong>@Html.LabelFor(model => model.BookId)</strong></td>
+                        <td class="col-md-1"></td>
+                        <td>
+                            @Html.DropDownListFor(m => m.BookId, (SelectList)ViewBag.BooksDropDown, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.BookId, "", new { @class = "text-danger" })
+                        </td>
+                        <td class="col-md-1"></td>
+                        <td>
+                            <input type="submit" value="Add" class="btn btn-default" />
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+}

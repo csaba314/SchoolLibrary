@@ -1,0 +1,98 @@
+﻿@model MVC.ViewModels.RentalsIndexViewModel
+
+@{
+    TempData.Keep("model");
+}
+
+<br />
+<div class="container">
+    @if (ViewBag.CustomerId == 0)
+    {
+        Html.RenderPartial("SelectCustomer", Model.Rental);
+    }
+    else
+    {
+        Html.RenderPartial("SelectBook", Model.Rental);
+
+        <div class="row">
+            <div class="col-md-4">
+                <dl class="dl-horizontal table-bordered">
+                    <dt>Customer:</dt>
+                    <dd><strong> @Model.Rental.Customer.FullName</strong></dd>
+                    <dt>Membership Type:</dt>
+                    <dd><strong>@Model.Rental.Customer.CustomerType</strong></dd>
+                    <dt>Can Rent:</dt>
+                    <dd><strong>@Model.Rental.CustomerRentalCapacity books</strong></dd>
+                </dl>
+            </div>
+        </div>
+
+        if (Model.Rental.BooksToRent.Count > 0)
+        {
+            using (Html.BeginForm("ConfirmRental", "Rentals", FormMethod.Post))
+            {
+                <input type="submit" value="Confirm Selection" class="btn btn-success" />
+            }
+        }
+
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        Title
+                    </th>
+                    <th>
+                        Author
+                    </th>
+                    <th>
+                        Copies Available
+                    </th>
+                    <th>
+                        Return Date
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var book in Model.Rental.BooksToRent)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => book.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => book.Author.FullName)
+                        </td>
+                        <td>
+                            @(book.NumberInStock - book.RentedBooks)
+                        </td>
+                        <td>
+                            @{
+                                var returnDate = DateTime.Now.AddDays(14).Date;
+                            }
+                            @returnDate.ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            @Html.ActionLink("Remove Book", "RemoveBook", "Rentals", new { bookId = book.ID },
+                                                                                     new { @class = "btn btn-default" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+
+
+    }
+
+</div>
+
+<div>
+    @Html.ActionLink("Back", "Index", "Rentals", new { @class = "btn btn-primary" })
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

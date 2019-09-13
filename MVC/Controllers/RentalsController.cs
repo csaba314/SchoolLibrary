@@ -8,17 +8,26 @@ using System.Web.Mvc;
 using AutoMapper;
 using System.Net;
 using Services.Models;
+using System.Collections;
 
 namespace MVC.Controllers
 {
     public class RentalsController : Controller
     {
         private IRentalServices _rentalServices;
+        private ICustomerServices _customerServices;
+        private IBookServices _bookServices;
         private IParameterBuilder _parameterBuilder;
 
-        public RentalsController(IRentalServices rentalServices, IParameterBuilder parameterBuilder)
+        public RentalsController(
+            IRentalServices rentalServices, 
+            IParameterBuilder parameterBuilder,
+            ICustomerServices customerServices,
+            IBookServices bookServices)
         {
             _rentalServices = rentalServices;
+            _customerServices = customerServices;
+            _bookServices = bookServices;
             _parameterBuilder = parameterBuilder;
         }
 
@@ -60,116 +69,118 @@ namespace MVC.Controllers
             return View(model);
         }
 
-        
 
 
-        //#region Create New Rental
-        //// GET: /CreateRental
-        //[HttpGet]
-        //public ActionResult CreateRental(int customerId = 0)
-        //{
-        //    ViewBag.CustomerId = customerId;
-        //    var model = viewModelBuilder.BuildCreateEditViewModel(customerId);
 
-        //    if (customerId > 0)
-        //    {
-        //        if (model.CreateEditViewModel.Customer == null)
-        //        {
-        //            return HttpNotFound();
-        //        }
+        #region Create New Rental
+        // GET: /CreateRental
+        [HttpGet]
+        public ActionResult CreateRental(int customerId = 0)
+        {
+            ViewBag.CustomerId = customerId;
+            var model = DependencyResolver.Current.GetService<RentalsIndexViewModel>();
+            model.Rental = /*DependencyResolver.Current.GetService<RentalDTO>();*/new RentalDTO();
+            model.Rental.BooksToRent = new List<IBook>();
+            ViewBag.CustomersDropDown = new SelectList(_rentalServices.PopulateCustomersDropDown(), "Key", "Value");
+
+            if (customerId > 0)
+            {
+                model.Rental.Customer = _customerServices.Get(customerId);
+
+                if (model.Rental.Customer == null)
+                {
+                    return HttpNotFound();
+                }
+                model.Rental.CustomerId = model.Rental.Customer.Id;
+                model.Rental.CustomerRentalCapacity = _rentalServices.GetCustomerRentalCapacity(model.Rental.Customer);
+                ViewBag.BooksDropDown = new SelectList(_rentalServices.PopulateBooksDropDown(), "Key", "Value");
+
+                ViewBag.CustomerId = model.Rental.Customer.Id;
+                ViewBag.CustomerRentalCapacity = model.Rental.CustomerRentalCapacity;
+
+            }
+            TempData["model"] = model;
+
+            return View(model);
+        }
+
+        // GET /Rentals/CreateRental?bookId=1
+        [HttpGet]
+        public ActionResult AddBooks(int? bookId)
+        {
+            var model = TempData["model"] as RentalsIndexViewModel;
+
+            if (bookId != null)
+            {
+                var bookToAdd = _bookServices.Get((int)bookId);
 
 
-        //        ViewBag.CustomerId = model.CreateEditViewModel.Customer.Id;
-        //        ViewBag.CustomerRentalCapacity = model.CreateEditViewModel.CustomerRentalCapacity;
+                if ((bookToAdd != null)
+                    && (model.Rental.CustomerRentalCapacity > 0)
+                    && (!model.Rental.BooksToRent.Contains(bookToAdd)))
+                {
+                    // add book to the BooksToRent list
+                    model.Rental.BooksToRent.Add(bookToAdd);
 
-        //    }
-        //    TempData["model"] = model;
+                    // remove the book from the dropdown list
+                    ViewBag.BooksDropDown = new SelectList(_rentalServices.PopulateBooksDropDown()
+                                                            .Where(kvp => kvp.Key != bookId.ToString()), "Key", "Value");
 
-        //    return View(model);
-        //}
+                    // decrement customer rental capacity after a book is added
+                    model.Rental.CustomerRentalCapacity--;
+                }
+            }
+            TempData["model"] = model;
+            ViewBag.CustomerRentalCapacity = model.Rental.CustomerRentalCapacity;
+            return View("CreateRental", model);
+        }
 
-        //// GET /Rentals/CreateRental?bookId=1
-        //[HttpGet]
-        //public ActionResult AddBooks(int? bookId)
-        //{
-        //    var model = TempData["model"] as RentalsIndexViewModel;
+        [HttpGet]
+        public ActionResult RemoveBook(int bookId)
+        {
+            var model = TempData["model"] as RentalsIndexViewModel;
 
-        //    if (bookId != null)
-        //    {
-        //        var bookToAdd = unitOfWork.Books.Get((int)bookId);
+            var bookToRemove = _bookServices.Get(bookId);
 
+            if ((bookToRemove != null)
+                && (model.Rental.BooksToRent.Contains(bookToRemove)))
+            {
+                // remove the book from BooksToRent list
+                model.Rental.BooksToRent.Remove(bookToRemove);
 
-        //        if ((bookToAdd != null)
-        //            && (model.CreateEditViewModel.CustomerRentalCapacity > 0)
-        //            && (!model.CreateEditViewModel.BooksToRent.Contains(bookToAdd)))
-        //        {
+                // increment rental capacity after book is removed
+                model.Rental.CustomerRentalCapacity++;
 
-        //            var newList = model.CreateEditViewModel.BooksDropdown.Where(i => i.Value != bookId.ToString());
-        //            model.CreateEditViewModel.BooksDropdown = newList.OrderBy(b => b.Text);
+                // add the removed book back to the BooksDropdown list
 
-        //            // add book to the BooksToRent list
-        //            model.CreateEditViewModel.BooksToRent.Add(bookToAdd);
+                //List<SelectListItem> newList = model.BooksDropDown.ToList();
+                //newList.Add(new SelectListItem { Text = bookToRemove.Title, Value = bookToRemove.ID.ToString() });
+                //model.BooksDropDown = new SelectList(newList.OrderBy(b => b.Text));
+            }
 
-        //            // decrement rental capacity after a book is added
-        //            model.CreateEditViewModel.CustomerRentalCapacity--;
-        //        }
-        //    }
-        //    TempData["model"] = model;
-        //    ViewBag.CustomerRentalCapacity = model.CreateEditViewModel.CustomerRentalCapacity;
-        //    return View("CreateRental", model);
-        //}
+            TempData["model"] = model;
+            ViewBag.CustomerRentalCapacity = model.Rental.CustomerRentalCapacity;
+            return View("CreateRental", model);
+        }
 
-        //[HttpGet]
-        //public ActionResult RemoveBook(int bookId)
-        //{
-        //    var model = TempData["model"] as RentalsIndexViewModel;
+        [HttpPost]
+        public ActionResult ConfirmRental()
+        {
 
-        //    var bookToRemove = unitOfWork.Books.Get(bookId);
+            var model = TempData["model"] as RentalsIndexViewModel;
 
-        //    if ((bookToRemove != null)
-        //        && (model.CreateEditViewModel.BooksToRent.Contains(bookToRemove)))
-        //    {
-        //        // remove the book from BooksToRent list
-        //        model.CreateEditViewModel.BooksToRent.Remove(bookToRemove);
+            foreach (var book in model.Rental.BooksToRent)
+            {
+                var newRental = DependencyResolver.Current.GetService<IRental>();
+                newRental.BookId = book.ID;
+                newRental.CustomerId = model.Rental.Customer.Id;
+                newRental.DateRented = DateTime.Now;
 
-        //        // increment rental capacity after book is removed
-        //        model.CreateEditViewModel.CustomerRentalCapacity++;
-
-        //        // add the removed book back to the BooksDropdown list
-        //        List<SelectListItem> newList = model.CreateEditViewModel.BooksDropdown.ToList();
-        //        newList.Add(new SelectListItem { Text = bookToRemove.Title, Value = bookToRemove.ID.ToString() });
-        //        model.CreateEditViewModel.BooksDropdown = newList.OrderBy(b => b.Text);
-        //    }
-
-        //    TempData["model"] = model;
-        //    ViewBag.CustomerRentalCapacity = model.CreateEditViewModel.CustomerRentalCapacity;
-        //    return View("CreateRental", model);
-        //}
-
-        //[HttpPost]
-        //public ActionResult ConfirmRental()
-        //{
-
-        //    var model = TempData["model"] as RentalsIndexViewModel;
-
-        //    foreach (var book in model.CreateEditViewModel.BooksToRent)
-        //    {
-        //        unitOfWork.Rentals.Add(new Rental
-        //        {
-        //            BookId = book.ID,
-        //            CustomerId = model.CreateEditViewModel.Customer.Id,
-        //            DateRented = DateTime.Now
-        //        });
-
-        //        unitOfWork.Books.Get(book.ID).RentedBooks++;
-        //        unitOfWork.Customers.Get(model.CreateEditViewModel.Customer.Id).RentedBooks++;
-
-        //    }
-        //    unitOfWork.Save();
-
-        //    return RedirectToAction("Index");
-        //}
-        //#endregion
+                _rentalServices.Add(newRental);
+            }
+            return RedirectToAction("Index");
+        }
+        #endregion
 
 
         #region Return Book
