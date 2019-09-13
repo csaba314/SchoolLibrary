@@ -1,0 +1,182 @@
+﻿@model MVC.ViewModels.RentalsIndexViewModel
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Rentals";
+    TempData.Keep("model");
+
+}
+<div class="main-container col-md-12">
+    <h2>@ViewBag.Title</h2>
+
+
+    <p>
+        <table>
+            <tr style="height:60px;">
+                <td>
+                    @Html.ActionLink("Create New Rental", "CreateRental", "Rentals", new { @class = "btn btn-primary" })
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Search By</strong>
+                </td>
+            </tr>
+            <tr>
+
+
+                @*Search records*@
+                @using (Html.BeginForm("Index", "Rentals", FormMethod.Get))
+                {
+                    <td style="width:160px;">
+                        @Html.DropDownList("searchBy",
+                                           (SelectList)ViewBag.SearchByDropDown,
+                                           new { @class = "form-control", style="width: 150px;" })
+                    </td>
+                    <td style="width:160px;">
+                        @Html.TextBox("searchString", Model.Filtering.CurrentFilter, new { @class = "form-control", style = "width: 150px;" })
+                    </td>
+                    <td>
+                        @Html.Hidden("sortOrder", Model.Sorting.SortingParam)
+                        @Html.Hidden("currentFilter", Model.Filtering.CurrentFilter)
+                        @Html.Hidden("pageSize", Model.Rentals.PageSize)
+                        @Html.Hidden("recordsFilter", Model.Filtering.RecordsFilter)
+                        <input type="submit" value="Search" class="btn btn-primary" />
+                    </td>
+
+                }
+
+
+
+
+                @*Filter Records by Rented, Returned or All records*@
+                <td style="column-width:60px;"></td>
+                @using (Html.BeginForm("Index", "Rentals", FormMethod.Get))
+                {
+                    <td>
+                        <strong>Filter Records</strong>
+                    </td>
+                    <td style="column-width:15px;"></td>
+                    <td>
+                        @Html.DropDownList("recordsFilter",
+                                           (SelectList)ViewBag.RecordsFilter,
+                                           new { @class = "form-control", style="width: 130px;" })
+
+                        @Html.Hidden("sortOrder", Model.Sorting.SortingParam )
+                        @Html.Hidden("searchString", Model.Filtering.SearchString)
+                        @Html.Hidden("currentFilter", Model.Filtering.CurrentFilter)
+                        @Html.Hidden("id", Model.Options.Id )
+                        @Html.Hidden("searchBy", Model.Filtering.SearchBy)
+                        @Html.Hidden("pageSize", Model.Rentals.PageSize)
+                    </td>
+                    <td style="column-width:15px;"></td>
+                    <td>
+                        <input type="submit" value="Select" class="btn btn-default" />
+                    </td>
+                }
+            </tr>
+        </table>
+    </p>
+
+    @*Display all rental records*@
+    <div class="table-container">
+        <table class="table table-hover">
+            <tr>
+                <th>
+                    ID
+                </th>
+                <th>
+                    @Html.ActionLink("Book Title", "Index", new { sortOrder = ViewBag.BookTitleSort,
+                                                                  currentFilter = Model.Filtering.CurrentFilter,
+                                                                  searchBy = Model.Filtering.SearchBy,
+                                                                  recordsFilter = Model.Filtering.RecordsFilter,
+                                                                  pageSize = Model.Rentals.PageSize,
+                                                                  pageNumber = Model.Rentals.PageNumber })
+                </th>
+                <th>
+                    @Html.ActionLink("Customer Name", "Index", new { sortOrder = ViewBag.CustomerNameSort,
+                                                                     currentFilter = Model.Filtering.CurrentFilter,
+                                                                     searchBy = Model.Filtering.SearchBy,
+                                                                     recordsFilter = Model.Filtering.RecordsFilter,
+                                                                     pageSize = Model.Rentals.PageSize,
+                                                                     pageNumber = Model.Rentals.PageNumber })
+                </th>
+                <th>
+                    Customer Type
+                </th>
+                <th>
+                    @Html.ActionLink("Rented", "Index", new { sortOrder = ViewBag.DateRentedSort,
+                                                              currentFilter = Model.Filtering.CurrentFilter,
+                                                              searchBy = Model.Filtering.SearchBy,
+                                                              recordsFilter = Model.Filtering.RecordsFilter,
+                                                              pageSize = Model.Rentals.PageSize,
+                                                              pageNumber = Model.Rentals.PageNumber })
+                </th>
+                <th>
+                    @Html.ActionLink("Returned", "Index", new { sortOrder = ViewBag.DateReturnedSort,
+                                                                currentFilter = Model.Filtering.CurrentFilter,
+                                                                searchBy = Model.Filtering.SearchBy,
+                                                                recordsFilter = Model.Filtering.RecordsFilter,
+                                                                pageSize = Model.Rentals.PageSize,
+                                                                pageNumber = Model.Rentals.PageNumber })
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model.Rentals)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Book.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Customer.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Customer.CustomerType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateRented)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateReturned)
+                    </td>
+                    <td>
+                        @if (item.DateReturned == null)
+                        {
+                            @Html.ActionLink("Return Book", "Index", "Rentals", new { id = item.Id,
+                                                                                      sortOrder = Model.Sorting.SortingParam,
+                                                                                      currentFilter = Model.Filtering.CurrentFilter,
+                                                                                      searchBy = Model.Filtering.SearchBy,
+                                                                                      recordsFilter = Model.Filtering.RecordsFilter,
+                                                                                      pageSize = Model.Rentals.PageSize,
+                                                                                      pageNumber = Model.Rentals.PageNumber },
+                                                                                new { @class= "btn btn-success btn-sm"})
+                        }
+                    </td>
+                </tr>
+
+
+                //Return a book
+                if (Model.Options.Id == item.Id)
+                {
+                    <tr>
+                        <td colspan="6">
+                            @{ Html.RenderPartial("ReturnBook", Model.Rental); }
+                        </td>
+                    </tr>
+                }
+
+            }
+
+        </table>
+
+        @*Paging*@
+        @{ Html.RenderPartial("RentalsPaging", Model);}
+
+    </div>
+
+</div>

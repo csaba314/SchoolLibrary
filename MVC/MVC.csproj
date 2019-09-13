@@ -158,6 +158,7 @@
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\FilesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RentalsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -171,6 +172,8 @@
     <Compile Include="ViewModels\IParameterBuilder.cs" />
     <Compile Include="ViewModels\IParameterizedViewModel.cs" />
     <Compile Include="ViewModels\ParameterBuilder.cs" />
+    <Compile Include="ViewModels\RentalDTO.cs" />
+    <Compile Include="ViewModels\RentalsIndexViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -223,6 +226,9 @@
     <Content Include="Views\Customers\Create.cshtml" />
     <Content Include="Views\Customers\Edit.cshtml" />
     <Content Include="Views\Customers\DisableCustomer.cshtml" />
+    <Content Include="Views\Rentals\Index.cshtml" />
+    <Content Include="Views\Rentals\RentalsPaging.cshtml" />
+    <Content Include="Views\Rentals\ReturnBook.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

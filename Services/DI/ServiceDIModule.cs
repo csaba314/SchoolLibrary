@@ -14,7 +14,7 @@ namespace Services.DI
 
             // Register all domain model objects
             builder.RegisterAssemblyTypes(serviceAssembly)
-                .Where(t => t.Namespace.EndsWith("Models"))
+                .Where(t => t.Namespace == "Services.Models")
                 .As(t => t.GetInterfaces().FirstOrDefault(i => i.Name == "I" + t.Name));
 
             //Register all Services

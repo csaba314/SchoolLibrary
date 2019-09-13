@@ -1,0 +1,38 @@
+﻿@model MVC.ViewModels.RentalsIndexViewModel
+@using PagedList.Mvc
+
+<table>
+    <tr>
+        @using (Html.BeginForm("Index", "Rentals", FormMethod.Get))
+        {
+            <td>
+                <strong>Page Size</strong>
+            </td>
+            <td>
+                @Html.DropDownList("pageSize", (SelectList)ViewBag.PageSizeDropdown, new { @class = "form-control", style = "width: 65px;" })
+
+                @Html.Hidden("sortOrder", Model.Sorting.SortingParam)
+                @Html.Hidden("currentFilter", Model.Filtering.CurrentFilter)
+                @Html.Hidden("id", Model.Options.Id)
+                @Html.Hidden("searchBy", Model.Filtering.SearchBy)
+                @Html.Hidden("recordsFilter", Model.Filtering.RecordsFilter)
+            </td>
+            <td style="column-width:15px;"></td>
+            <td>
+                <input type="submit" value="Select" class="btn btn-default" />
+            </td>
+            <td style="width:70px;"></td>
+            <td>
+                @Html.PagedListPager(Model.Rentals,
+                         pageNumber => Url.Action("Index","Rentals", new { pageNumber ,
+                                                                           id = Model.Options.Id,
+                                                                           sortOrder = Model.Sorting.SortingParam,
+                                                                           currentFilter = Model.Filtering.CurrentFilter,
+                                                                           searchBy = Model.Filtering.SearchBy,
+                                                                           recordsFilter = Model.Filtering.RecordsFilter,
+                                                                           pageSize = Model.Rentals.PageSize }),
+                                                                      new PagedListRenderOptions { DisplayPageCountAndCurrentLocation = true })
+            </td>
+        }
+    </tr>
+</table>

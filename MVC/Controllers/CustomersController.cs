@@ -38,7 +38,9 @@ namespace MVC.Controllers
             var model = DependencyResolver.Current.GetService<CustomerIndexViewModel>();
             //IEnumerable<IRental> rentals;
 
-            _parameterBuilder.Build(model, searchString, sortOrder, pageSize, pageNumber, id: id, IncludeRentalHistory: showRentalHistory);
+            _parameterBuilder.Build(model, searchString: searchString, sortingParam: sortOrder, 
+                pageSize: pageSize, pageNumber: pageNumber, 
+                id: id, IncludeRentalHistory: showRentalHistory);
 
             IEnumerable<IRental> rentals;
 

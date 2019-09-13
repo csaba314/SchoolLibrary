@@ -16,14 +16,17 @@ namespace MVC.ViewModels
         }
 
         public void Build(IParameterizedViewModel model, 
-                          string searchString, 
-                          string sortingParam, 
-                          int pageSize, int pageNumber, 
-                          int id = 0, bool includeAuthors = false, bool includeGenres = false, bool IncludeRentalHistory = false)
+                          string searchString = "", string searchBy = "", string recordsFilter = "",
+                          string sortingParam = "",
+                          int pageSize =  10, int pageNumber = 1, 
+                          int id = 0, bool includeAuthors = false, bool includeGenres = false, bool IncludeBooks = false, 
+                          bool IncludeCustomers = false, bool IncludeRentalHistory = false)
         {
             model.Filtering = _parametersFactory.FilteringInstance();
             model.Filtering.SearchString = searchString;
             model.Filtering.CurrentFilter = searchString;
+            model.Filtering.SearchBy = searchBy;
+            model.Filtering.RecordsFilter = recordsFilter;
 
             model.Sorting = _parametersFactory.SortingInstance();
             model.Sorting.SortingParam = sortingParam;
@@ -36,6 +39,8 @@ namespace MVC.ViewModels
             model.Options.Id = id;
             model.Options.IncludeAuthors = includeAuthors;
             model.Options.IncludeGenres = includeGenres;
+            model.Options.IncludeBooks = IncludeBooks;
+            model.Options.IncludeCustomers = IncludeCustomers;
             model.Options.IncludeRentalHistory = IncludeRentalHistory;
         }
     }

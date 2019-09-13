@@ -1,0 +1,35 @@
+﻿@model MVC.ViewModels.RentalDTO
+
+@using (Html.BeginForm("ReturnBook", "Rentals", FormMethod.Post))
+{
+    <table>
+        <tr>
+            <td>
+                <h3>Return Book:<strong> @Model.Book.Title</strong></h3>
+            </td>
+            <td style="width:50px;"></td>
+            <td>
+                <input type="submit" value="Confirm" class="btn btn-success" />
+            </td>
+        </tr>
+    </table>
+
+    <dl class="dl-horizontal">
+        <dt>Customer:</dt>
+        <dd>@Html.DisplayFor(m => m.Customer.FullName)</dd>
+
+        <dt>Date Rented</dt>
+        <dd>@Html.DisplayFor(m => m.DateRented)</dd>
+
+        <dt>Rental Duration</dt>
+        <dd>
+            @{
+                int days = (DateTime.Now - Model.DateRented).Days;
+            }
+            @days
+        </dd>
+    </dl>
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.BookId)
+    @Html.HiddenFor(m => m.CustomerId)
+}

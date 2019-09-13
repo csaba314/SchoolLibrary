@@ -68,7 +68,6 @@ namespace Services.Migrations
             var authors = new List<Author>
             {
                 new Author {
-                    ID = 1,
                     LastName ="Anonymous",
                     FirstName =string.Empty,
                     Books = new List<IBook>() },

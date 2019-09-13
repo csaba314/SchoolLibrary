@@ -36,8 +36,10 @@ namespace Services.Services
                                               || c.LastName.ToLower().Contains(filtering.SearchString.ToLower()));
             }
 
-            rentals = _unitOfWork.GetAll<Rental>().Include(r => r.Book)
-                .Where(r => r.CustomerId == options.Id).OrderByDescending(x => x.DateRented);
+            rentals = _unitOfWork.GetAll<Rental>()
+                .Include(r => r.Book)
+                .Where(r => r.CustomerId == options.Id)
+                .OrderByDescending(x => x.DateRented);
 
 
             if ((options.IncludeRentalHistory == false) && (rentals != null))

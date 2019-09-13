@@ -45,7 +45,7 @@ namespace MVC.Controllers
             var model = DependencyResolver.Current.GetService<AuthorIndexViewModel>();
             //var model = new AuthorIndexViewModel();
 
-            _parameterBuilder.Build(model, searchString, sortOrder, pageSize, pageNumber);
+            _parameterBuilder.Build(model, searchString: searchString, sortingParam: sortOrder, pageSize: pageSize, pageNumber: pageNumber);
             model.Authors = _services.GetAll(model.Sorting, model.Filtering, model.Paging, model.Options);
 
             if (id != null)

@@ -46,7 +46,7 @@ namespace MVC.Controllers
             }
 
             var model = DependencyResolver.Current.GetService<BookIndexViewModel>();
-            _parameterBuilder.Build(model, searchString, sortOrder, pageSize, pageNumber, includeAuthors: true, includeGenres: true);
+            _parameterBuilder.Build(model, searchString: searchString, sortingParam: sortOrder, pageSize: pageSize, pageNumber: pageNumber, includeAuthors: true, includeGenres: true);
 
             model.Books = _services.GetBooksWithAuthorsAndGenres(model.Sorting, model.Filtering, model.Paging, model.Options);
 

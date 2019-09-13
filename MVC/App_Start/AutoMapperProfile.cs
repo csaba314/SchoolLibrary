@@ -20,6 +20,9 @@ namespace MVC.App_Start
 
             Mapper.CreateMap<CustomerDTO, ICustomer>().ForMember(m => m.Id, opt => opt.Ignore());
             Mapper.CreateMap<ICustomer, CustomerDTO>();
+
+            Mapper.CreateMap<RentalDTO, IRental>();
+            Mapper.CreateMap<IRental, RentalDTO>();
         }
     }
 }

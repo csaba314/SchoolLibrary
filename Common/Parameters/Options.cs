@@ -6,6 +6,9 @@
 
         public bool IncludeAuthors { get; set; } = false;
         public bool IncludeGenres { get; set; } = false;
+        public bool IncludeBooks { get; set; } = false;
+        public bool IncludeCustomers { get; set; } = false;
         public bool IncludeRentalHistory { get; set; } = false;
+
     }
 }
